@@ -61,6 +61,26 @@ export const addScholarAccount = async (address, scholarAccount) => {
     }
 }
 
+export const updateScholarAccount = async (address, scholarAccount) => {
+    address = address.toLowerCase()
+    scholarAccount.ethAddress = scholarAccount.ethAddress.toLowerCase()
+
+    assertValidScholarAccount(scholarAccount)
+
+    const currentAccounts = await getScholarAccounts(address)
+    const original = currentAccounts.find(account => account.ethAddress === scholarAccount.ethAddress)
+    if (!original) {
+        throw new Error(`Scholar account: ${scholarAccount.ethAddress} does not exist.`)
+    } else {
+        Object.entries(scholarAccount).forEach(([key, value]) => {
+            original[key] = value
+        })
+        await database.collection("users").doc(address).update({
+            scholar_accounts: currentAccounts
+        })
+    }
+}
+
 const assertValidScholar = (scholar) => {
     if (!!scholar.name && !!scholar.discord && !!scholar.roninAddress && !!scholar.age &&
         !!scholar.sex && !!scholar.country && !!scholar.city && !!scholar.experience && !!scholar.startDate) {

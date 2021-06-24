@@ -1,12 +1,11 @@
 import { Box, Button, Flex, Heading, Select } from "@chakra-ui/react"
 import { FormControl, FormLabel, Input } from "@chakra-ui/react"
 import { NumberDecrementStepper, NumberInput, NumberInputField, NumberIncrementStepper, NumberInputStepper } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
-import { addScholarAccount, getScholars } from "../../../firebase/firestore/scholars"
+import { useState } from "react"
+import { addScholarAccount } from "../../../firebase/firestore/scholars"
 import moment from "moment"
 
-const NewAccountForm = ({ connectedAccount, postSubmit }) => {
-    const [scholars, setScholars] = useState([])
+const NewAccountForm = ({ connectedAccount, postSubmit, scholars }) => {
     const [formObject, setFormObject] = useState({
         name: "",
         scholar: "",
@@ -42,14 +41,8 @@ const NewAccountForm = ({ connectedAccount, postSubmit }) => {
         }
     }
 
-    useEffect(() => {
-        getScholars(connectedAccount).then(scholars => {
-            setScholars(scholars)
-        })
-    }, [connectedAccount])
-
     return (
-        <Box bg="blue.800" borderRadius={5} mb={3} p={3} w="100%">
+        <Box bg="blue.800" borderRadius={5} flex="1" p={3}>
             <Heading mb={3} size="sm">Add a scholarship account</Heading>
             <Flex mb={2}>
                 <FormControl isRequired mr={2}>
